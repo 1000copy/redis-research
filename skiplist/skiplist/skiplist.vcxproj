@@ -63,6 +63,7 @@
     <ClInclude Include="s.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="huffman.c" />
     <ClCompile Include="s.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
