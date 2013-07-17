@@ -155,7 +155,8 @@
  }
  
  //#ifdef SKIP_LIST_TEST_MAIN
- int main() {
+ 
+ int main1() {
      int count = 20, i;
      skiplist * sl = slCreate();
      srand((unsigned)time(0));
@@ -186,3 +187,8 @@
      return 0;
  }
  //#endif
+
+ int main_() {
+	main1();
+ }
+
