@@ -11,18 +11,22 @@ typedef struct{
 }HTNode, *HuffmanTree;
 
 /******* Choose two smallest from 0 to n in T *************/
+// s1 is smallest ,s2 is second smallest ! s1最小，s2次小！
 void Select(HuffmanTree T, int len, int *s1, int *s2)
 {
 	int i = 0;
+	//  T[i++].parent != -1 还没有被huffman化的节点。就是还不曾被选中为s1，或者s2的。
 	while (T[i++].parent != -1);
 	*s1 = i-1;
 	while (T[i++].parent != -1);
 	*s2 = i-1;
+	// 如果s1 > s2 ，就交换下
 	if (T[*s1].weight>T[*s2].weight) {
 		i = *s1;
 		*s1 = *s2;
 		*s2 = i;
 	}
+	// 有比s1小的，就把它当成s1，有比s2小且不是s1的，就让他成为s2
 	for (i=0; i<=len; i++) {
 		if(T[i].parent == -1) {
 			if (T[*s1].weight > T[i].weight) {
