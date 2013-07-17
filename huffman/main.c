@@ -141,6 +141,7 @@ void HuffmanCoding(FILE *psrc, FILE *pdst, FILE *pdeciphering)
 		***************************************************/
 		rewind(pdst);
 		fflush(pdst);
+		// c 指向到 huffman tree's root 
 		c = 510;
 		while (!feof(pdst)) {
 			j = fread(buff, 1, 100, pdst);
@@ -149,14 +150,16 @@ void HuffmanCoding(FILE *psrc, FILE *pdst, FILE *pdeciphering)
 			for (i=0; i<j; i++)
 				show_binary(buff[i]);
 			*******************************************/
+			// 从 root 开始走到 叶子节点，就可以找到原来的字符
 			for (i=0; i<j; i++) {
 				for (k=0; k<8; k++) {
 					if (buff[i]&0x80) // 测试 最高位是否为 1
 						c = HT[c].rchild;
-					else c = HT[c].lchild;
+					else 
+						c = HT[c].lchild;
 					if (HT[c].lchild == -1) {
-					fputc((char)c, pdeciphering);
-					c = 510;
+						fputc((char)c, pdeciphering);
+						c = 510;
 					}
 					buff[i] <<= 1;
 				}	
@@ -174,7 +177,7 @@ void HuffmanCoding(FILE *psrc, FILE *pdst, FILE *pdeciphering)
 		fclose(pdst);
 		fclose(psrc);
 		fclose(pdeciphering);
-	return;
+		return;
 
 }
 
@@ -189,7 +192,7 @@ int main(void)
 	// scanf("%s", deciphering);
 	char *srcfile ="C:\\WINDOWS\\notepad.exe";
 	char *dstfile ="C:\\WINDOWS\\notepad1.exe";
-	char *deciphering="C:\\WINDOWS\\notepad2.exe";	
+	char *deciphering="C:\\WINDOWS\\notepad3.exe";	
 	FILE *psrc = fopen(srcfile, "r");
 	FILE *pdst = fopen(dstfile, "w+");
 	FILE *pdeciphering = fopen(deciphering, "w");
