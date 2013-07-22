@@ -1,12 +1,15 @@
 package rpn;
 
+import java.math.BigDecimal;
 import java.util.Stack;
 //"1. read src尾部加上 ）
 // 2. 在Stack内push一个（" 这样的表达式和原来的等效，但是不必分支判断stack是否非空。牛逼！
+
 public class Rpn {
 
     public static void main(String[] args) {
-        test_fix1();
+//        test_fix1();
+        test_fix2();
     }
 
     private static void test_fix1() {
@@ -25,8 +28,31 @@ public class Rpn {
             System.out.println(e.getMessage());
         }
     }
+    static void assertEq(String a,String b,String err){
+        if (!a.equals(b)){
+            System.out.println(String.format("not eq:%s,%s,%s",a,b,err));
+//           System.out.println();
+        }
+     }
+    static void assertEq(String a,String b){
+        assertEq(a,b,"");
+    }
+    private static void test_fix2() {
+//        assertEq(new Expression("1+2").eval().toString(),"3");
+//        assertEq(new Expression("1+2*8").eval().toString(),"17");        
+//        Expression exp = new Expression("5*sin(2)");
+//        assertEq("","ERR:",exp.toRPN());
+        BigDecimal a = new BigDecimal("3");
+        BigDecimal b = new BigDecimal("4");
+        BigDecimal c = new BigDecimal("10");
+        Expression exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c);
+        System.out.println(exp.toRPN());
+        exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b);
+        System.out.println(exp.toRPN());
+        BigDecimal result = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c).eval();
+        System.out.println(result);
+    }
 }
-
 class Postfix {
 
     public int priority(char ch) {
@@ -87,3 +113,4 @@ class Postfix {
                 && ch != ')';
     }
 }
+ 
