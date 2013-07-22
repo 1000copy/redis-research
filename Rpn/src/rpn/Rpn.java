@@ -2,6 +2,8 @@ package rpn;
 
 import java.math.BigDecimal;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //"1. read src尾部加上 ）
 // 2. 在Stack内push一个（" 这样的表达式和原来的等效，但是不必分支判断stack是否非空。牛逼！
 
@@ -49,8 +51,16 @@ public class Rpn {
         System.out.println(exp.toRPN());
         exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b);
         System.out.println(exp.toRPN());
-        BigDecimal result = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c).eval();
-        System.out.println(result);
+        BigDecimal result;
+        try {
+            result = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c).eval();
+            System.out.println(result);
+            exp = new Expression("SQRT(a^2 , b^2)").with("a",a).and("b",b);
+            System.out.println(exp.toRPN());
+        } catch (Exception ex) {
+            Logger.getLogger(Rpn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
 class Postfix {

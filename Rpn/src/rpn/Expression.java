@@ -212,6 +212,10 @@ public class Expression {
 	 */
 	private final char minusSign = '-';
 
+    private void Exception(String more_operant) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 	/**
 	 * The expression evaluators exception class.
 	 */
@@ -752,16 +756,16 @@ public class Expression {
 		String lastFunction = null;
 		while (tokenizer.hasNext()) {
 			String token = tokenizer.next();
-			if (isNumber(token)) {
+			if (isNumber(token)) {// 数字
 				outputQueue.add(token);
-			} else if (variables.containsKey(token)) {
+			} else if (variables.containsKey(token)) {//变量
 				outputQueue.add(variables.get(token).toPlainString());
-			} else if (functions.containsKey(token.toUpperCase())) {
+			} else if (functions.containsKey(token.toUpperCase())) {// 函数
 				stack.push(token);
 				lastFunction = token;
-			} else if (Character.isLetter(token.charAt(0))) {
+			} else if (Character.isLetter(token.charAt(0))) {//未定义变量
 				stack.push(token);
-			} else if (",".equals(token)) {
+			} else if (",".equals(token)) {//函数参数
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
 					outputQueue.add(stack.pop());
 				}
@@ -769,7 +773,7 @@ public class Expression {
 					throw new ExpressionException("Parse error for function '"
 							+ lastFunction + "'");
 				}
-			} else if (operators.containsKey(token)) {
+			} else if (operators.containsKey(token)) {// 操作符
 				Operator o1 = operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
 				while (operators.containsKey(token2)
@@ -781,9 +785,9 @@ public class Expression {
 					token2 = stack.isEmpty() ? null : stack.peek();
 				}
 				stack.push(token);
-			} else if ("(".equals(token)) {
+			} else if ("(".equals(token)) {// 左括号
 				stack.push(token);
-			} else if (")".equals(token)) {
+			} else if (")".equals(token)) {// 右括号
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
 					outputQueue.add(stack.pop());
 				}
@@ -816,7 +820,7 @@ public class Expression {
 	 * 
 	 * @return The result of the expression.
 	 */
-	public BigDecimal eval() {
+	public BigDecimal eval() throws java.lang.Exception {
 
 		Stack<BigDecimal> stack = new Stack<BigDecimal>();
 
@@ -838,7 +842,10 @@ public class Expression {
 				stack.push(new BigDecimal(token, mc));
 			}
 		}
-		return stack.pop().stripTrailingZeros();
+                BigDecimal r = stack.pop().stripTrailingZeros();
+                if (!stack.isEmpty())
+                    throw new Exception("more operant");
+		return r;
 	}
 
 	/**
