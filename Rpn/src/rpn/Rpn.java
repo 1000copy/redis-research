@@ -10,117 +10,68 @@ import java.util.logging.Logger;
 public class Rpn {
 
     public static void main(String[] args) {
-//        test_fix1();
+        test_fix1();
         test_fix2();
     }
 
     private static void test_fix1() {
         Postfix p = new Postfix();
         try {
-           System.out.print(p.toPostfix("10*(2+3)"));
-           System.out.println();
-            System.out.print(p.toPostfix("1*(2+3+4)"));
-           System.out.println();
-           System.out.print(p.toPostfix("1+2+3"));
-           System.out.println();
-           System.out.print(p.toPostfix("1*(2+3)").equals("123+*"));
-            System.out.print(p.toPostfix("1*(2+3+4)").equals("123+4+*"));
-            System.out.print(p.toPostfix("1+2+3").equals("12+3+"));
+           assertEq("10 2 3 +*",p.toPostfix("10*(2+3)"));
+           assertEq("1 2 3 +4 +*",p.toPostfix("1*(2+3+4)"));           
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
     static void assertEq(String a,String b,String err){
         if (!a.equals(b)){
-            System.out.println(String.format("not eq:%s,%s,%s",a,b,err));
+            System.out.println(String.format("Eq Assert Failure:%s,%s,%s",a,b,err));
 //           System.out.println();
         }
      }
     static void assertEq(String a,String b){
         assertEq(a,b,"");
     }
+    static void assertEq(BigDecimal a,BigDecimal b){
+        assertEq(a.toString(),b.toString(),"");
+    }
     private static void test_fix2() {
-//        assertEq(new Expression("1+2").eval().toString(),"3");
-//        assertEq(new Expression("1+2*8").eval().toString(),"17");        
-//        Expression exp = new Expression("5*sin(2)");
-//        assertEq("","ERR:",exp.toRPN());
-        BigDecimal a = new BigDecimal("3");
-        BigDecimal b = new BigDecimal("4");
-        BigDecimal c = new BigDecimal("10");
-        Expression exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c);
-        System.out.println(exp.toRPN());
-        exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b);
-        System.out.println(exp.toRPN());
-        BigDecimal result;
         try {
-            result = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c).eval();
-            System.out.println(result);
-            exp = new Expression("SQRT(a^2 , b^2)").with("a",a).and("b",b);
-            System.out.println(exp.toRPN());
+            //1+2=3            
+            assertEq(new BigDecimal(3),new Expression("1+2").eval());
+            //1+2*8=17
+            assertEq(new Expression("1+2*8").eval().toString(),"17");        
+            Expression exp = new Expression("5*sin(2)");
+            assertEq("","Just print RPN:",exp.toRPN());            
+            test_prioty_var_func();
+            test_comma_flow();            
         } catch (Exception ex) {
             Logger.getLogger(Rpn.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+    }
+    // 逗号的处理流程    
+    private static void test_comma_flow() {
+        // , 的处理 sqrt(1 ,2) = 1 2 sqrt 逗号并不导致 任何pop
+        assertEq("1 2 max",new Expression("max(1, 2)").toRPN());             
+        // , 的处理 sqrt(1+1 ,2) = 1 1 + 2  sqrt 逗号导致 加号 弹出堆栈
+        // , 不入堆栈，但是会弹出堆栈内容到输出，直到左括号
+        assertEq("1 1 + 2 max",new Expression("max(1+1, 2)").toRPN());
+    }
+
+    private static void test_prioty_var_func() {
+        Expression exp;
+        // 变量优先于函数，是否为缺陷?
+        BigDecimal a = new BigDecimal("3");
+        BigDecimal b = new BigDecimal("4");
+        BigDecimal c = new BigDecimal("10");
+        exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c);
+        assertEq(exp.toRPN(),"10 3 2 ^ 4 2 ^ +");
+        exp = new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b);
+        assertEq(exp.toRPN(),"3 2 ^ 4 2 ^ + SQRT");
+        try{
+            new Expression("SQRT(a^2 + b^2)").with("a",a).and("b",b).and("SQRT",c).eval();
+        }catch(Exception e){
+            // 多了一个操作数，需要处理异常
+        }
     }
 }
-class Postfix {
-
-    public int priority(char ch) {
-        if (ch == '^') {
-            return 3;
-        }
-        if (ch == '/' || ch == '*') {
-            return 2;
-        }
-        if (ch == '+' || ch == '-') {
-            return 1;
-        }
-        return 0;
-    }
-
-    public String toPostfix(String in) {
-        String copy = in + ")";
-        Stack s = new Stack();
-        s.push('(');
-        int i = 0, l = copy.length();
-        char ch;
-        String r = "";
-        while (i < l) {
-            ch = copy.charAt(i);
-            if (isLetter(ch)) {
-                while (isLetter(ch) && i < l) {
-                    r += ch;                    
-                    i++;
-                    ch = copy.charAt(i);
-                }
-                r += " ";
-                continue;
-            } else if (ch == '(') {
-                s.push(ch);
-            } else if (ch == ')') {
-                while (s.peek() != '(') {
-                    r += s.pop();
-                }
-                s.pop();
-            } else {
-                while (priority(ch) <= priority((char) s.peek())) {
-                    r += s.pop();
-                }
-                s.push(ch);
-            }
-            i++;
-        }
-        return r;
-    }
-
-    private boolean isLetter(char ch) {
-        return ch != '+'
-                && ch != '-'
-                && ch != '*'
-                && ch != '/'
-                && ch != '('
-                && ch != '^'
-                && ch != ')';
-    }
-}
- 

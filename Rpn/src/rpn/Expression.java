@@ -765,7 +765,7 @@ public class Expression {
 				lastFunction = token;
 			} else if (Character.isLetter(token.charAt(0))) {//未定义变量
 				stack.push(token);
-			} else if (",".equals(token)) {//函数参数
+			} else if (",".equals(token)) {//,
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
 					outputQueue.add(stack.pop());
 				}
@@ -776,11 +776,14 @@ public class Expression {
 			} else if (operators.containsKey(token)) {// 操作符
 				Operator o1 = operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
-				while (operators.containsKey(token2)
-						&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators
-								.get(token2).getPrecedence()) || (o1
-								.getPrecedence() < operators.get(token2)
-								.getPrecedence()))) {
+                                // 循环弹出opTop并且输出，直到 opTop 优先级低于 opThis
+				while (operators.containsKey(token2) &&
+                                        (
+                                            (o1.isLeftAssoc() && o1.getPrecedence() <= operators.get(token2).getPrecedence()) 
+                                            || 
+                                            (o1.getPrecedence() < operators.get(token2).getPrecedence())
+                                        )
+                                       ) {
 					outputQueue.add(stack.pop());
 					token2 = stack.isEmpty() ? null : stack.peek();
 				}
