@@ -8,12 +8,77 @@ import java.util.logging.Logger;
 // 2. 在Stack内push一个（" 这样的表达式和原来的等效，但是不必分支判断stack是否非空。牛逼！
 
 public class Rpn {
-
-    public static void main(String[] args) {
-        test_fix1();
-        test_fix2();
+//static int[]  insertion( int a[], int n ) {
+    /* Bubble sort for integers */
+public static void main(String[] args) {
+        int [] a = {1,3,2,5,4};
+//        int [] b = insertion(a,5);
+//        assertEq(b[2],3);
+        bubble(a,5);
+//        test_fix1();
+//        test_fix2();
+//        Expression e = new Expression("1.6*10/2");
+//    try {
+//        System.out.println(e.eval());
+//    } catch (Exception ex) {
+//        Logger.getLogger(Rpn.class.getName()).log(Level.SEVERE, null, ex);
+//    }
     }
 
+    static void swap(int a,int b)   {  }
+
+// int [] a = {1,3,2,5,4};
+// 
+static void bubble( int a[], int n )
+/* Pre-condition: a contains n items to be sorted */
+    {
+    int i, j;
+    /* Make n passes through the array */
+    for(i=0;i<n;i++)
+        {
+        /* From the first element to the end
+           of the unsorted section */
+        for(j=1;j<(n-i);j++)
+           {
+           /* If adjacent items are out of order, swap them */
+           if( a[j-1]>a[j] ) {
+//               swap(a[j-1],a[j]);
+               int x = a[j-1];
+               int y = a[j];
+               int t; t=x; x=y; y=t;
+               a[j-1]=x;
+               a[j]=y;
+           }
+           }
+           }
+        }
+       
+    // 插入排序 ：
+    static int[]  insertion( int[] a, int n ) {
+/* Pre-condition: a contains n items to be sorted */
+    int i, j, v;
+    /* Initially, the first item is considered 'sorted' */
+    /* i divides a into a sorted region, x<i, and an
+       unsorted one, x >= i */
+    for(i=1;i<n;i++) {
+        /* Select the item at the beginning of the
+           as yet unsorted section */
+        v = a[i];
+        /* Work backwards through the array, finding where v 
+           should go */
+        j = i;
+        /* If this element is greater than v,
+              move it up one */
+        while ( a[j-1] > v ) {
+          a[j] = a[j-1]; j = j-1;
+          if ( j <= 0 ) break;
+          }
+        /* Stopped when a[j-1] <= v, so put v at position j */
+        a[j] = v;
+        }
+    return a;
+    } 
+    
     private static void test_fix1() {
         Postfix p = new Postfix();
         try {
@@ -34,6 +99,12 @@ public class Rpn {
     }
     static void assertEq(BigDecimal a,BigDecimal b){
         assertEq(a.toString(),b.toString(),"");
+    }
+    static void assertEq(int a,int b){
+        if (a!=b){
+            System.out.println(String.format("Eq Assert Failure:%d,%d,%s",a,b));
+//           System.out.println();
+        }
     }
     private static void test_fix2() {
         try {
