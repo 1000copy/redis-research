@@ -1,8 +1,9 @@
 public class Bubble{ 
  public int[] run(int[] src) {  
+    // N-i 指向未排序区的最后一位  
     int N = src.length ;     
     for(int i=0;i<N;i++){
-	    src = bubble_big(src,N-i);
+	    bubble_big(src,N-i);
   	}
     return src;
   }
