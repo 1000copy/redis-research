@@ -9,6 +9,7 @@ public class TestAll extends TestSuite {
         TestSuite suite = new TestSuite("TestSuite Test"); 
         suite.addTestSuite(TestCalcuator.class);          
         suite.addTestSuite(TestBubble.class);
+        suite.addTestSuite(TestInsertion.class);
         return suite; 
     } 
     public static void main(String args[]){ 
