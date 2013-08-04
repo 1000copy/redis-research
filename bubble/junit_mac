@@ -1,0 +1,8 @@
+#在MAC OS X 控制台下使用Javac命令编译java程序时,会出现乱码的情况,现提供一种解决办法:
+#打开终端( terminal)窗口,点击桌面左上方的终端(terminal)-->偏好设置(preferences)-->设置-->高级-->字符编码-->简体中文(EUC)#/简体中文(GB2312)
+
+set -e # stop on error 
+export CLASSPATH=${CLASSPATH}:../lib/junit.jar:../lib/hamcrest.jar:.
+javac -encoding utf8 TestAll.java TestBubble.java Bubble.java Heap.java 
+java org.junit.runner.JUnitCore  TestAll
+rm *.class

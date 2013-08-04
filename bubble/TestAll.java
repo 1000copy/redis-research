@@ -10,9 +10,14 @@ public class TestAll extends TestSuite {
         suite.addTestSuite(TestCalcuator.class);          
         suite.addTestSuite(TestBubble.class);
         suite.addTestSuite(TestInsertion.class);
+        suite.addTestSuite(TestHeap.class);
         return suite; 
     } 
     public static void main(String args[]){ 
-        TestRunner.run(suite()); 
+        try{
+            TestRunner.run(suite()); 
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     } 
 }
