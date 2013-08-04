@@ -7,14 +7,15 @@ public class HeapInn{
 	int currentIndex = 0;
 	public int remove(){
 		int root = array[0];
+		array[0] = array[currentIndex-1];
 		currentIndex--;
 		down(currentIndex);
-		return 0;
+		return root;
 	}
 	public void up(int index){
 		int bottom = array[index];
-		int _parent = parent(index);
-		while (_parent > 0 ){
+		while (index > 0 ){
+			int _parent = parent(index);
 			if (array[_parent] > bottom){
 				array[index] = array[_parent];
 				array[_parent] = bottom;
@@ -23,7 +24,11 @@ public class HeapInn{
 		}
 	}
 	public void down(int index){
-		
+		while (index < currentIndex/2) {// at least one child
+			int large ;
+			int _left = left(index);
+			int _right = right(index);
+		}
 	}
 	public void insert(int n)
 	{
@@ -31,11 +36,15 @@ public class HeapInn{
 		array[currentIndex] = n ;
 		// System.out.println(array[currentIndex]);
 		// System.out.println(currentIndex);
-		currentIndex++;
+		
 		up(currentIndex);
+		currentIndex++;
 	}	
 	public int []getInner(){
 		return array;
+	}
+	public int getCurrentIndex(){
+		return currentIndex;
 	}
 	public int left(int i){
 		return 2*i+1;

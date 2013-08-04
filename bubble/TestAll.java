@@ -7,9 +7,9 @@ import junit.framework.TestSuite;
 public class TestAll extends TestSuite { 
     public static Test suite() { 
         TestSuite suite = new TestSuite("TestSuite Test"); 
-        suite.addTestSuite(TestCalcuator.class);          
-        suite.addTestSuite(TestBubble.class);
-        suite.addTestSuite(TestInsertion.class);
+        // suite.addTestSuite(TestCalcuator.class);          
+        // suite.addTestSuite(TestBubble.class);
+        // suite.addTestSuite(TestInsertion.class);
         suite.addTestSuite(TestHeap.class);
         return suite; 
     } 

@@ -5,4 +5,4 @@ set -e # stop on error
 export CLASSPATH=${CLASSPATH}:../lib/junit.jar:../lib/hamcrest.jar:.
 javac -encoding utf8 TestAll.java TestBubble.java Bubble.java Heap.java 
 java org.junit.runner.JUnitCore  TestAll
-rm *.class
+# rm *.class
