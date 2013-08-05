@@ -6,14 +6,14 @@ public class Heap{
 		return heapsort(src);
 	}
 	int[] heapsort(int[] src){     
-		 HeapInn i = new HeapInn();
+		 HeapInn inn = new HeapInn();
 		 for(int j=0;j<src.length;j++)
-		 	i.insert(src[j]);
-		 List<Integer> v = new ArrayList();
-		 v.add(i.remove());
-		 int[] result = new int[src.length];
-		 Integer[] rrr= v.toArray(new Integer[0]);
-		 return convertIntegers(rrr) ;
+		 	inn.insert(src[j]);
+		 int[] r = new int[src.length];
+		 int k = 0;		 
+		 while(inn.hasMore())
+		 	r[k++] = inn.remove();
+		 return r ;
 	}  
  	public static int[] convertIntegers(Integer[] integers)
 	{

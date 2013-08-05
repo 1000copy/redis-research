@@ -4,12 +4,14 @@ import java.util.List;
 public class HeapInn{
 	int[] array = new int[200];
 	// int index = 0 ;
-	int currentIndex = 0;
-	public int remove(){
+	int currentSize = 0;
+	public int remove() {
+		if (currentSize==0) 
+			return -1;
 		int root = array[0];
-		array[0] = array[currentIndex-1];
-		currentIndex--;
-		down(currentIndex);
+		array[0] = array[currentSize-1];
+		currentSize--;
+		down(0);
 		return root;
 	}
 	public void up(int index){
@@ -24,27 +26,42 @@ public class HeapInn{
 		}
 	}
 	public void down(int index){
-		while (index < currentIndex/2) {// at least one child
-			int large ;
+		while (index < currentSize/2) {// at least one child
+			int min ;
 			int _left = left(index);
 			int _right = right(index);
+			if (array[_left] < array[_right])
+				min = _left ;
+			else
+				min = _right ;
+			if (array[min] < array[index]){
+				//swap 
+				int temp = array[min];
+				array[min] = array[index];
+				array[index] = temp ;				
+				index = min;
+			}else
+				break;
+
 		}
 	}
 	public void insert(int n)
 	{
-		// array[currentIndex++] = n ;
-		array[currentIndex] = n ;
-		// System.out.println(array[currentIndex]);
-		// System.out.println(currentIndex);
-		
-		up(currentIndex);
-		currentIndex++;
+		array[currentSize] = n ;
+		up(currentSize);
+		currentSize++;
 	}	
 	public int []getInner(){
 		return array;
 	}
-	public int getCurrentIndex(){
-		return currentIndex;
+	// public String getInnerString(){
+	// 	String r = "";
+	// 	for (int i=0;i<currentSize;i++)
+	// 		r += array[i] +",";
+	// 	return r;
+	// }
+	public boolean hasMore(){
+		return currentSize>0;
 	}
 	public int left(int i){
 		return 2*i+1;
