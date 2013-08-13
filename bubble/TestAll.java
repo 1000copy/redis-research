@@ -11,6 +11,7 @@ public class TestAll extends TestSuite {
         // suite.addTestSuite(TestBubble.class);
         // suite.addTestSuite(TestInsertion.class);
         suite.addTestSuite(TestHeap.class);
+        suite.addTestSuite(TestShellSort.class);
         return suite; 
     } 
     public static void main(String args[]){ 
