@@ -34,7 +34,7 @@ public class ShellSort{
 	         for ( i = gap; i < n; i++ )
 	         {
 	             j = i - gap;
-	             // 分组排序
+	             // 分组排序 0,4,8 一排，1,5,9一排，2,6,10一排,3,7 一排，
 	             temp = a[i];             
 	             while (( j >= 0 ) && ( a[j] > temp ))
 	             {
@@ -46,6 +46,9 @@ public class ShellSort{
 	     }    	 	 
 	     return a ;
 	}
+	// 当 gap = 1  ，整个shellsort就退化为插入排序
+	// gap的选择，最后一定是gap=1的最后一道排序，好像很麻烦，但是gap《》1的部分排序，回导致在一般
+	// insertsort时需要大量移动元素的机会降低。
  	public int[] run(int[] a)
 	{
 	     int n = a.length;
@@ -56,6 +59,7 @@ public class ShellSort{
 	         for ( i = gap; i < n; i++ )
 	         {
 	             j = i - gap;
+	             // 组内做插入排序
 	             temp = a[i];             
 	             while (( j >= 0 ) && ( a[j] > temp ))
 	             {
